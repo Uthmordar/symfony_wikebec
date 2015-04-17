@@ -25,7 +25,7 @@ class CSVCommand extends ContainerAwareCommand{
         $container=$this->getContainer();
         
         $csvParser=$container->get('csv_parser_services');
-        
+                
         $data=$csvParser->parse($csv);
         
         $output->writeln('<info>Ok</info>');
