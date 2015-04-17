@@ -32,7 +32,11 @@ class CSVCommand extends ContainerAwareCommand{
         $dataSet = $csvParser->parse($csv);
         
         foreach ($dataSet as $dataEntry) {
-            $mot = $motBuilder->create($dataEntry);
+            try{
+                $mot = $motBuilder->create($dataEntry);
+            }catch (\RuntimeException $e){
+                $output->writeln($e->getMessage());
+            }
         }
         
         $container->get('doctrine')->getManager()->flush();

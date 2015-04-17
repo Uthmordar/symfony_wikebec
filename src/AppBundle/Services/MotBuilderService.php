@@ -5,7 +5,9 @@ class MotBuilderService{
     
     private $doctrine;
     private $manager;
-    private $repo;
+    
+    private $motRepo;
+    private $catRepo;
     private $catRef = [
         "e"=>"Expression",
         "v"=>"Vocabulaire",
@@ -22,11 +24,8 @@ class MotBuilderService{
     
     public function create($data)
     {
-        $terme = $data["terme"];
-        $mot = $this->motRepo->findOneByTerme($terme);
-        
-        if(!empty($mot)){
-            // THROW EXCEPTION
+        if($this->motRepo->findOneByTerme($data["terme"])){
+            throw new \RuntimeException('Term already exists '.$data["terme"]);
         }
         
         $mot = new \AppBundle\Entity\Mot();
@@ -37,31 +36,36 @@ class MotBuilderService{
         $date = new \DateTime();
         $lastEdit = ( !empty( $data["lastEdit"] ) && is_int( $data["lastEdit"] ) ) ? $date->setTimestamp($data["lastEdit"]) : $date;
         
-        
-        // CHECKER SI LA VALEUR EST EGALE A "NULL" OU NULL OU ""
-        $mot->setTerme($terme)
-            ->setTrad( $data["trad"] )
-            ->setVariations( $data["variations"]!="NULL" ? $data["variations"] : null )
-            ->setPrononciation( $data["prononciation"]!="NULL" ? $data["prononciation"] : null )
-            ->setNature( $data["nature"]!="NULL" ? $data["nature"] : null )
-            ->setGenre( $data["genre"]!="NULL" ? $data["genre"] : null )
-            ->setNombre( $data["nombre"]!="NULL" ? $data["nombre"] : null )
-            ->setOrigine( $data["origine"]!="NULL" ? $data["origine"] : null )
+        $mot->setTerme($data["terme"])
+            ->setTrad( $this->checkNull($data["trad"]) )
+            ->setVariations( $this->checkNull($data["variations"]) )
+            ->setPrononciation( $this->checkNull($data["prononciation"]) )
+            ->setNature( $this->checkNull($data["nature"]) )
+            ->setGenre( $this->checkNull($data["genre"]) )
+            ->setNombre( $this->checkNull($data["nombre"]) )
+            ->setOrigine( $this->checkNull($data["origine"]) )
             ->setCreatedDate( $dateCreated )
             ->setLastEdit( $lastEdit )
             ->setNbVotes( $data["nb_votes"] );
         
-        $cat = $this->catRepo->findOneByNom( $this->catRef[ $data["cat"] ] );
-        
-        if(empty($cat)){
-            // THROW EXCEPTION
-            return false;
-        }
-        
-        $mot->setCategorie($cat);
-        
+        $this->attachCategorie($mot, $data["cat"]);
+
         $this->manager->persist($mot);
     
         return $mot;
+    }
+    
+    public function checkNull($input){
+        return ($input!="NULL" && $input!="")? $input : null; 
+    }
+    
+    public function attachCategorie(\AppBundle\Entity\Mot $mot, $catName){
+        $cat = $this->catRepo->findOneByNom( $this->catRef[ $catName ] );
+        
+        if(empty($cat)){
+            throw new \RuntimeException('Term without categorie');
+        }
+        
+        $mot->setCategorie($cat);
     }
 }
