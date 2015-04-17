@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Tests\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Mot
@@ -34,63 +34,63 @@ class Mot
     /**
      * @var string
      *
-     * @ORM\Column(name="variations", type="text")
+     * @ORM\Column(name="variations", type="text", nullable=true)
      */
     private $variations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prononciation", type="string", length=255)
+     * @ORM\Column(name="prononciation", type="string", length=255, nullable=true)
      */
     private $prononciation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nature", type="string", length=255)
+     * @ORM\Column(name="nature", type="string", length=255, nullable=true)
      */
     private $nature;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="genre", type="string", length=255)
+     * @ORM\Column(name="genre", type="string", length=255, nullable=true)
      */
     private $genre;
 
     /**
      * @var integer
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="nb_votes", type="integer")
      */
-    private $nb_votes;
+    private $nb_votes = 0;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255, nullable=true)
      */
     private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="origine", type="text")
+     * @ORM\Column(name="origine", type="text", nullable=true)
      */
     private $origine;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdDate", type="datetime")
+     * @ORM\Column(name="createdDate", type="datetime", nullable=true)
      */
     private $createdDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="lastEdit", type="datetime")
+     * @ORM\Column(name="lastEdit", type="datetime", nullable=true)
      */
     private $lastEdit;
     
@@ -113,6 +113,13 @@ class Mot
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vote", mappedBy="mot", cascade={"remove", "persist"})
      */
     private $votes;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="trad", type="text", nullable=true)
+     */
+    private $trad;
 
 
     /**
@@ -439,6 +446,8 @@ class Mot
     public function setCategorie(\AppBundle\Entity\Categorie $categorie = null)
     {
         $this->categorie = $categorie;
+        
+        $categorie->addMot($this);
 
         return $this;
     }
@@ -484,5 +493,28 @@ class Mot
     public function getVotes()
     {
         return $this->votes;
+    }
+
+    /**
+     * Set trad
+     *
+     * @param string $trad
+     * @return Mot
+     */
+    public function setTrad($trad)
+    {
+        $this->trad = $trad;
+
+        return $this;
+    }
+
+    /**
+     * Get trad
+     *
+     * @return string 
+     */
+    public function getTrad()
+    {
+        return $this->trad;
     }
 }

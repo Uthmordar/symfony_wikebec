@@ -6,7 +6,7 @@ class CSVParserServices{
         $data=[];
         $header=null;
         if (($handle = fopen($csv, "r")) !== FALSE) {
-            while (($row = fgetcsv($handle, 0, ",")) !== FALSE) {
+            while (($row = fgetcsv($handle, 0, ";")) !== FALSE) {
                 if(!$header){
                     $header=$row;
                 }else{

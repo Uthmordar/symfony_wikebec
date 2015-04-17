@@ -9,3 +9,12 @@ services:
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
     csv_parser_services:
         class: AppBundle\Services\CSVParserServices
+    mot_builder:
+        class: AppBundle\Services\MotBuilderService
+        arguments: ["@doctrine"]
+    definition_builder:
+        class: AppBundle\Services\DefinitionBuilderService
+        arguments: ["@doctrine"]
+    exemple_builder:
+        class: AppBundle\Services\ExempleBuilderService
+        arguments: ["@doctrine"]

@@ -22,11 +22,20 @@ class CSVCommand extends ContainerAwareCommand{
 
     protected function execute(InputInterface $input, OutputInterface $output){
         $csv = $input->getArgument('csv');     
-        $container=$this->getContainer();
+        $container = $this->getContainer();
         
-        $csvParser=$container->get('csv_parser_services');
+        $csvParser = $container->get('csv_parser_services');
+        $motBuilder = $container->get('mot_builder');
+        $definitionBuilder = $container->get('definition_builder');
+        $exempleBuilder = $container->get('exemple_builder');
         
-        $data=$csvParser->parse($csv);
+        $dataSet = $csvParser->parse($csv);
+        
+        foreach ($dataSet as $dataEntry) {
+            $mot = $motBuilder->create($dataEntry);
+        }
+        
+        $container->get('doctrine')->getManager()->flush();
         
         $output->writeln('<info>Ok</info>');
     }

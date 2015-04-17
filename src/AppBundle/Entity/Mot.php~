@@ -113,6 +113,13 @@ class Mot
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vote", mappedBy="mot", cascade={"remove", "persist"})
      */
     private $votes;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="trad", type="text")
+     */
+    private $trad;
 
 
     /**
@@ -330,5 +337,159 @@ class Mot
     public function getLastEdit()
     {
         return $this->lastEdit;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->definitions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->exemples = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->votes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set nb_votes
+     *
+     * @param integer $nbVotes
+     * @return Mot
+     */
+    public function setNbVotes($nbVotes)
+    {
+        $this->nb_votes = $nbVotes;
+
+        return $this;
+    }
+
+    /**
+     * Get nb_votes
+     *
+     * @return integer 
+     */
+    public function getNbVotes()
+    {
+        return $this->nb_votes;
+    }
+
+    /**
+     * Add definitions
+     *
+     * @param \AppBundle\Entity\Definition $definitions
+     * @return Mot
+     */
+    public function addDefinition(\AppBundle\Entity\Definition $definitions)
+    {
+        $this->definitions[] = $definitions;
+
+        return $this;
+    }
+
+    /**
+     * Remove definitions
+     *
+     * @param \AppBundle\Entity\Definition $definitions
+     */
+    public function removeDefinition(\AppBundle\Entity\Definition $definitions)
+    {
+        $this->definitions->removeElement($definitions);
+    }
+
+    /**
+     * Get definitions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * Add exemples
+     *
+     * @param \AppBundle\Entity\Exemple $exemples
+     * @return Mot
+     */
+    public function addExemple(\AppBundle\Entity\Exemple $exemples)
+    {
+        $this->exemples[] = $exemples;
+
+        return $this;
+    }
+
+    /**
+     * Remove exemples
+     *
+     * @param \AppBundle\Entity\Exemple $exemples
+     */
+    public function removeExemple(\AppBundle\Entity\Exemple $exemples)
+    {
+        $this->exemples->removeElement($exemples);
+    }
+
+    /**
+     * Get exemples
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExemples()
+    {
+        return $this->exemples;
+    }
+
+    /**
+     * Set categorie
+     *
+     * @param \AppBundle\Entity\Categorie $categorie
+     * @return Mot
+     */
+    public function setCategorie(\AppBundle\Entity\Categorie $categorie = null)
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return \AppBundle\Entity\Categorie 
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
+    }
+
+    /**
+     * Add votes
+     *
+     * @param \AppBundle\Entity\Vote $votes
+     * @return Mot
+     */
+    public function addVote(\AppBundle\Entity\Vote $votes)
+    {
+        $this->votes[] = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Remove votes
+     *
+     * @param \AppBundle\Entity\Vote $votes
+     */
+    public function removeVote(\AppBundle\Entity\Vote $votes)
+    {
+        $this->votes->removeElement($votes);
+    }
+
+    /**
+     * Get votes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 }

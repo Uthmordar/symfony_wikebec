@@ -66,4 +66,44 @@ class Categorie
     {
         return $this->nom;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->mot = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add mot
+     *
+     * @param \AppBundle\Entity\Mot $mot
+     * @return Categorie
+     */
+    public function addMot(\AppBundle\Entity\Mot $mot)
+    {
+        $this->mot[] = $mot;
+
+        return $this;
+    }
+
+    /**
+     * Remove mot
+     *
+     * @param \AppBundle\Entity\Mot $mot
+     */
+    public function removeMot(\AppBundle\Entity\Mot $mot)
+    {
+        $this->mot->removeElement($mot);
+    }
+
+    /**
+     * Get mot
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMot()
+    {
+        return $this->mot;
+    }
 }
