@@ -77,6 +77,7 @@ class Definition
     public function setMot(\AppBundle\Entity\Mot $mot = null)
     {
         $this->mot = $mot;
+        $mot->addDefinition($this);
 
         return $this;
     }
