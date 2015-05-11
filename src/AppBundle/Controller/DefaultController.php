@@ -15,12 +15,10 @@ class DefaultController extends Controller
     {
         // NOUVELLE INSTANCE
         $newMot = new \AppBundle\Entity\Mot();
-        $newDef1 = new \AppBundle\Entity\Definition;
-        $newDef2 = new \AppBundle\Entity\Definition;
+        $newDef = new \AppBundle\Entity\Definition;
         $newExemple = new \AppBundle\Entity\Exemple;
         
-        $newMot->getDefinitions()->add($newDef1);
-        $newMot->getDefinitions()->add($newDef2);
+        $newMot->getDefinitions()->add($newDef);
         $newMot->getExemples()->add($newExemple);
         
         $motForm = $this->createForm(new \AppBundle\Form\MotType(), $newMot);
@@ -28,7 +26,13 @@ class DefaultController extends Controller
         $motForm->handleRequest($request);
         
         if($motForm->isValid()){
-            die('Sisi');
+            $manager = $this->getDoctrine()->getManager();
+            
+            $manager->persist($newMot);
+            $newDef->setMot($newMot);
+            $newExemple->setMot($newMot);
+            
+            $manager->flush();
         }
         
         $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");

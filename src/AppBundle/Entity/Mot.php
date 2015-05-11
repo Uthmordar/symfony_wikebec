@@ -517,4 +517,23 @@ class Mot
     {
         return $this->trad;
     }
-}
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersistCb()
+    {
+        $date = new \DateTime;
+        $this->setCreatedDate($date);
+        $this->setLastEdit($date);
+    }
+    
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdateCb()
+    {
+        $date = new \DateTime;
+        $this->setLastEdit($date);
+    }
+}   

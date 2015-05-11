@@ -18,14 +18,42 @@ class MotType extends AbstractType
             ->add('terme')
             ->add('variations')
             ->add('prononciation')
-            ->add('nature')
-            ->add('genre')
-            ->add('nombre')
+            ->add('nature', "choice", array(
+                "label"=>"Nature:",
+                "choices" => array(
+                    'abréviation' => "Abréviation",
+                    'verbe' => "Verbe",
+                    'nom commun' => 'Nom Commun',
+                    'nom propre' => "Nom propre",
+                    'adjectif' => "Adjectif",
+                    'autre'    => "Autre"
+                ),
+                "multiple" => false,
+                "expanded" => false
+            ))
+            ->add('genre', "choice", array(
+                "label"=>"Genre:",
+                "choices" => array(
+                    'masculin' => "Masculin",
+                    'féminin' => "Féminin",
+                    'invariable' => "Invariable"
+                ),
+                "multiple" => false,
+                "expanded" => false
+            ))
+            ->add('nombre', "choice", array(
+                "label"=>"Nombre:",
+                "choices" => array(
+                    'singulier' => "Singulier",
+                    'pluriel' => "Pluriel"
+                ),
+                "multiple" => false,
+                "expanded" => true
+            ))
             ->add('origine')
-            ->add('trad')
             ->add('categorie')
-            ->add('exemples', 'collection', array('type' => new ExempleType()))
-            ->add('definitions', 'collection', array('type' => new DefinitionType()))
+            ->add('exemples', 'collection', array('type' => new ExempleType(), 'label'=>null))
+            ->add('definitions', 'collection', array('type' => new DefinitionType(), 'label'=>null))
             ->add('Go!', 'submit');
     }
     

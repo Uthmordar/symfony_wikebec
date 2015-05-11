@@ -15,8 +15,8 @@ class ExempleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('texteCa')
-            ->add('texteFr')
+            ->add('texteCa', null, ['label'=>'Exemple: '])
+            ->add('texteFr', null, ['label'=>'Traduction: '])
         ;
     }
     

@@ -15,7 +15,7 @@ class DefinitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('texte');
+            ->add('texte', null, ['label'=>'Définition: ']);
     }
     
     /**
