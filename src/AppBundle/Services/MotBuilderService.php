@@ -25,7 +25,7 @@ class MotBuilderService{
     public function create($data)
     {
         if($this->motRepo->findOneByTerme($data["terme"])){
-            throw new \RuntimeException('Term already exists '.$data["terme"]);
+            //throw new \RuntimeException('Term already exists '.$data["terme"]);
         }
         
         $mot = new \AppBundle\Entity\Mot();

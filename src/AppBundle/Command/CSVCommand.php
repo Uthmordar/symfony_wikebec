@@ -21,6 +21,8 @@ class CSVCommand extends ContainerAwareCommand{
     }
 
     protected function execute(InputInterface $input, OutputInterface $output){
+        
+        
         $csv = $input->getArgument('csv');     
         $container = $this->getContainer();
         
@@ -34,6 +36,8 @@ class CSVCommand extends ContainerAwareCommand{
         foreach ($dataSet as $dataEntry) {
             try{
                 $mot = $motBuilder->create($dataEntry);
+                $definitionBuilder->checkMultipleDefinitions($mot, $dataEntry);
+                $exempleBuilder->create($mot, $dataEntry);
             }catch (\RuntimeException $e){
                 $output->writeln($e->getMessage());
             }

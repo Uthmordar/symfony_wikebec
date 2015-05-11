@@ -24,14 +24,14 @@ class Exemple
     /**
      * @var string
      *
-     * @ORM\Column(name="texte_ca", type="text")
+     * @ORM\Column(name="texte_ca", type="text", nullable=true)
      */
     private $texteCa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="texte_fr", type="text")
+     * @ORM\Column(name="texte_fr", type="text", nullable=true)
      */
     private $texteFr;
     
@@ -107,7 +107,7 @@ class Exemple
     public function setMot(\AppBundle\Entity\Mot $mot = null)
     {
         $this->mot = $mot;
-        $this->addExemple($this);
+        $mot->addExemple($this);
 
         return $this;
     }

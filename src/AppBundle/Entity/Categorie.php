@@ -106,4 +106,9 @@ class Categorie
     {
         return $this->mot;
     }
+    
+    public function __toString()
+    {
+        return $this->nom;
+    }
 }

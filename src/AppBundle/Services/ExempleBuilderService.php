@@ -13,8 +13,18 @@ class ExempleBuilderService{
         $this->motRepo = $doctrine->getRepository("AppBundle:Exemple");
     }
     
-    public function create($mot)
+    public function checkNull($input){
+        return ($input!="NULL" && $input!="")? $input : null; 
+    }
+    
+    public function create($mot, $data)
     {
+        $exemple = new \AppBundle\Entity\Exemple();
         
+        $exemple->setTexteFr( $this->checkNull($data["trad"]) )
+                ->setTexteCa( $this->checkNull($data["exemple"]) )
+                ->setMot($mot);
+
+        $this->manager->persist($exemple);
     }
 }
