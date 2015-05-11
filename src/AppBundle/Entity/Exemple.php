@@ -107,6 +107,7 @@ class Exemple
     public function setMot(\AppBundle\Entity\Mot $mot = null)
     {
         $this->mot = $mot;
+        $this->addExemple($this);
 
         return $this;
     }

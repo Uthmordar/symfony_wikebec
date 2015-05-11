@@ -37,7 +37,7 @@ class CSVCommand extends ContainerAwareCommand{
             }catch (\RuntimeException $e){
                 $output->writeln($e->getMessage());
             }
-        };
+        }
         
         $container->get('doctrine')->getManager()->flush();
         
