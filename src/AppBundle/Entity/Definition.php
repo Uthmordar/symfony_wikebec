@@ -1,7 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +25,7 @@ class Definition
      * @var string
      *
      * @ORM\Column(name="texte", type="text")
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      */
     private $texte;
     
@@ -77,8 +78,6 @@ class Definition
     public function setMot(\AppBundle\Entity\Mot $mot = null)
     {
         $this->mot = $mot;
-        $mot->addDefinition($this);
-
         return $this;
     }
 

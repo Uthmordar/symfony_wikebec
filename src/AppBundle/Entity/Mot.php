@@ -23,11 +23,28 @@ class Mot
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
+     * @Assert\Email(message="Votre adresse mail est mal formatée")
+     */
+    private $email;
+    
+    function getEmail() {
+        return $this->email;
+    }
+
+    function setEmail($email) {
+        $this->email = $email;
+    }
 
     /**
      * @var string
      *
      * @ORM\Column(name="terme", type="string", length=255)
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      */
     private $terme;
 
@@ -380,7 +397,8 @@ class Mot
     public function addDefinition(\AppBundle\Entity\Definition $definitions)
     {
         $this->definitions[] = $definitions;
-
+        $definitions->setMot($this);
+        
         return $this;
     }
 
@@ -413,7 +431,7 @@ class Mot
     public function addExemple(\AppBundle\Entity\Exemple $exemples)
     {
         $this->exemples[] = $exemples;
-
+        $exemples->setMot($this);
         return $this;
     }
 

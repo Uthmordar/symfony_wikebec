@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +26,7 @@ class Exemple
      * @var string
      *
      * @ORM\Column(name="texte_ca", type="text", nullable=true)
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      */
     private $texteCa;
 
@@ -32,6 +34,7 @@ class Exemple
      * @var string
      *
      * @ORM\Column(name="texte_fr", type="text", nullable=true)
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      */
     private $texteFr;
     
@@ -107,7 +110,6 @@ class Exemple
     public function setMot(\AppBundle\Entity\Mot $mot = null)
     {
         $this->mot = $mot;
-        $mot->addExemple($this);
 
         return $this;
     }

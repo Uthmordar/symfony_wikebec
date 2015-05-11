@@ -14,6 +14,11 @@ class MotType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $userEmail = null;
+        if( isset($_COOKIE['wikebek_user_email']) ){
+            $userEmail = filter_input( INPUT_COOKIE, 'wikebek_user_email' );
+        }
+        
         $builder
             ->add('terme')
             ->add('variations')
@@ -52,8 +57,21 @@ class MotType extends AbstractType
             ))
             ->add('origine')
             ->add('categorie')
-            ->add('exemples', 'collection', array('type' => new ExempleType(), 'label'=>null))
-            ->add('definitions', 'collection', array('type' => new DefinitionType(), 'label'=>null))
+            ->add( 'definitions', 'collection', array(
+                'type' => new DefinitionType(), 
+                'allow_add'=>true, 
+                'by_reference'=>false,
+                'cascade_validation' => true, 
+                'options' => array(
+                    'label' => false
+                ), 
+                'allow_delete'=>true )
+            )
+            ->add('exemples', 'collection', array('type' => new ExempleType(), 'allow_add'=>true, 'by_reference'=>false, 'cascade_validation' => true, 'options' => array('label' => false), 'allow_delete'=>true ))
+            ->add('email', 'email', [
+                'label'=>'Votre adresse mail',
+                'data' => $userEmail
+            ])
             ->add('Go!', 'submit');
     }
     
@@ -63,7 +81,8 @@ class MotType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Mot'
+            'data_class' => 'AppBundle\Entity\Mot',
+            'cascade_validation' => true
         ));
     }
 

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form( motForm, { "attr" : { "novalidate" : "novalidate" } } ) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var $exempleCollectionHolder;
+        var $definitionCollectionHolder;
+        
+        var $addTagLink = $('<a href="#" class="add_exemple_link">Ajouter un exemple</a>');
+        var $addDefinitionLink = $('<a href="#" class="add_definition_link">Ajouter une définition</a>');
+        var $newLinkLi = $('<div></div>').append($addTagLink);
+        var $newDefinitionLi = $('<div></div>').append($addDefinitionLink);
+
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            $exempleCollectionHolder = $('#appbundle_mot_exemples');
+            $definitionCollectionHolder = $('#appbundle_mot_definitions');
+            
+
+            // add the "add a tag" anchor and li to the tags ul
+            $exempleCollectionHolder.append($newLinkLi);
+            $definitionCollectionHolder.append($newDefinitionLi);
+            
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $exempleCollectionHolder.data('index', $exempleCollectionHolder.find(':input').length);
+            $definitionCollectionHolder.data('index', $definitionCollectionHolder.find(':input').length);
+
+            $addTagLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addExempleForm( $exempleCollectionHolder, $newLinkLi);
+            });
+            
+            $addDefinitionLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addExempleForm( $definitionCollectionHolder, $newDefinitionLi);
+            });
+        });
+        
+        function addExempleForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<div></div>').append(newForm);
+            $newLinkLi.before($newFormLi);
+            addTagFormDeleteLink($newFormLi);
+        }
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a href="#">Supprimer</a>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // empêche le lien de créer un « # » dans l'URL
+                e.preventDefault();
+
+                // supprime l'élément li pour le formulaire de tag
+                $tagFormLi.remove();
+            });
+        }
+    </script>
+{% endblock %}
+

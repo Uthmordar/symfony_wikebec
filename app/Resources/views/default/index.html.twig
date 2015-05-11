@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    Homepage.
-    {{ form( motForm, { "attr" : { "novalidate" : "novalidate" } } ) }}
     <ul class="row mosaique-film" id="filmsList">
         {% for mot in mots %}
             <li>
