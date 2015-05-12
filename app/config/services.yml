@@ -2,6 +2,7 @@
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
 #    parameter_name: value
+    site_key: "%recaptcha_key%"
 
 services:
 #    service_name:
@@ -18,3 +19,6 @@ services:
     exemple_builder:
         class: AppBundle\Services\ExempleBuilderService
         arguments: ["@doctrine"]
+    recaptcha_services:
+        class: AppBundle\Services\reCaptchaServices
+        arguments: ["%site_key%", "%recaptcha_site_key%"]

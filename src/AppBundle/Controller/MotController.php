@@ -13,6 +13,7 @@ class MotController extends Controller
      */
     public function createAction(Request $request)
     {
+        $captcha=$this->get('recaptcha_services');
         // NOUVELLE INSTANCE
         $newMot = new \AppBundle\Entity\Mot();
         $newDef = new \AppBundle\Entity\Definition;
@@ -26,15 +27,18 @@ class MotController extends Controller
         $motForm->handleRequest($request);
         
         if($motForm->isValid()){
-            $manager = $this->getDoctrine()->getManager();
+            $response=$captcha->setToken($request->get('g-recaptcha-response'))->checkResponse();
+            if(json_decode($response)->success){
+                $manager = $this->getDoctrine()->getManager();
             
-            $manager->persist($newMot);
-            $newDef->setMot($newMot);
-            $newExemple->setMot($newMot);
-            
-            $manager->flush();
-            
-            
+                $manager->persist($newMot);
+                $newDef->setMot($newMot);
+                $newExemple->setMot($newMot);
+
+                $manager->flush();
+            }else{
+                $this->addFlash('error', 'Veuillez valider le captcha');
+            }            
         }
         
         $params = array(
@@ -49,6 +53,7 @@ class MotController extends Controller
      */
     public function editAction($id, Request $request)
     {
+        $captcha=$this->get('recaptcha_services');
         $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
         $mot = $motsRepo->findOneById($id);
         
@@ -70,27 +75,32 @@ class MotController extends Controller
         $motForm->handleRequest($request);
         
         if($motForm->isValid()){
-            $manager = $this->getDoctrine()->getManager();
-            
-            
-            
-            foreach ($originalDefs as $def) {
-                $manager->persist($def);
-            }
-            
-            foreach ($originalExemples as $exemple) {
-                if ($mot->getExemples()->contains($exemple) == false) {
-                    $manager->remove($exemple);
-                } else {
-                    $manager->persist($exemple);    
+            $response=$captcha->setToken($request->get('g-recaptcha-response'))->checkResponse();
+            if(json_decode($response)->success){
+                $manager = $this->getDoctrine()->getManager();
+
+
+
+                foreach ($originalDefs as $def) {
+                    $manager->persist($def);
                 }
+
+                foreach ($originalExemples as $exemple) {
+                    if ($mot->getExemples()->contains($exemple) == false) {
+                        $manager->remove($exemple);
+                    } else {
+                        $manager->persist($exemple);    
+                    }
+                }
+
+                setcookie('wikebek_user_email', $mot->getEmail(), time()+2500000);
+
+                $manager->persist($mot);
+
+                $manager->flush();
+            }else{
+                $this->addFlash('error', 'Veuillez valider le captcha');
             }
-            
-            setcookie('wikebek_user_email', $mot->getEmail(), time()+2500000);
-            
-            $manager->persist($mot);
-            
-            $manager->flush();
         }
         
         $mots = $motsRepo->findAll();
@@ -101,5 +111,15 @@ class MotController extends Controller
         );
         
         return $this->render('default/edit.html.twig', $params);
+    }
+    
+    public function getCaptchaAction(){
+        $captcha=$this->get('recaptcha_services');
+        
+        $params=[
+            'secret_key'=>$captcha->getSecret()
+        ];
+        
+        return $this->render('includes/captcha.html.twig', $params);
     }
 }

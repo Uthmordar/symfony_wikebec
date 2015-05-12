@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form( motForm, { "attr" : { "novalidate" : "novalidate" } } ) }}
+    {{ form_start(motForm, { "attr" : { "novalidate" : "novalidate" } }) }}
+    {{ form_widget(motForm) }}
+    {{render(controller('AppBundle:Mot:getCaptcha'))}}
+    {{ form_end(motForm) }}
 {% endblock %}
 
 {% block javascripts %}
