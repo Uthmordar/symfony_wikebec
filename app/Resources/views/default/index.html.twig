@@ -4,7 +4,7 @@
     <ul class="row mosaique-film" id="filmsList">
         {% for mot in mots %}
             <li>
-                <p>{{mot.terme}}</p>
+                 <a href="{{ path('showDefinitionMot', {'id': mot.id}) }}">{{mot.terme}}</a>
             </li>
         {% endfor %}
     </ul>
