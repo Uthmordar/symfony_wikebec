@@ -27,7 +27,7 @@ class MotListener{
     public function preUpdate(Mot $mot, LifecycleEventArgs $event)
     {
         $date = new \DateTime;
-        // $mot->setLastEdit($date);
+        $mot->setLastEdit($date);
         $this->mailer->sendUpdate()->send(['mot'=>$mot]);
         $this->backuper->setUpdate()->save($mot);
     }

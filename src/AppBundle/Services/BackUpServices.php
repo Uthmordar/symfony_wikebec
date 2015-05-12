@@ -43,7 +43,6 @@ class BackUpServices{
             $backup->setMotId( $mot->getId() );
             
             $this->manager->persist($backup);
-            $this->manager->flush();
         } else {
             die('do stuff');
         }
