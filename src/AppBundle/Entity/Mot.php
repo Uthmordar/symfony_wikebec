@@ -537,15 +537,4 @@ class Mot extends ContainerAware
     {
         return $this->trad;
     }
-        
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdateCb()
-    {
-        $date = new \DateTime;
-        $this->setLastEdit($date);
-        $mailer=$this->container->get('mailer_services');
-        $mailer->sendUpdate()->send(['mot'=>$this]);
-    }
 }   

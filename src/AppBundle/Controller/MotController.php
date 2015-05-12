@@ -27,13 +27,17 @@ class MotController extends Controller
         $motForm->handleRequest($request);
         
         if($motForm->isValid()){
-            $response=$captcha->setToken($request->get('g-recaptcha-response'))->checkResponse();
+            $response= $captcha->setToken($request->get('g-recaptcha-response'))->checkResponse();
             if(json_decode($response)->success){
                 $manager = $this->getDoctrine()->getManager();
             
                 $manager->persist($newMot);
                 $newDef->setMot($newMot);
                 $newExemple->setMot($newMot);
+                
+                $infoText = $newMot->getTerme() . ' a bien été créé!';
+                $this->addFlash('info', $infoText);
+                return $this->redirectToRoute('showDefinitionMot', ['id'=>$id]);
 
                 $manager->flush();
             }else{
@@ -45,11 +49,41 @@ class MotController extends Controller
             "motForm" => $motForm->createView()
         );
         
-        return $this->render('default/create.html.twig', $params);
+        return $this->render('default/mot/create.html.twig', $params);
     }
     
     /**
-     * @Route("/edit/{id}", name="editMot")
+     * @Route("/{id}/definition", name="showDefinitionMot")
+     */
+    public function showDefinitionAction($id, Request $request)
+    {
+        $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
+        $mot = $motsRepo->findOneById($id);
+        
+        $confirmForm = $this->createForm(new \AppBundle\Form\ConfirmType());
+        $confirmForm->handleRequest($request);
+        
+        if($confirmForm->isValid()){
+            $captcha=$this->get('recaptcha_services');
+            $response=$captcha->setToken($request->get('g-recaptcha-response'))->checkResponse();
+            if(json_decode($response)->success){
+                return $this->redirectToRoute('deleteMot', ['id'=>$id]);
+            }else{
+                $this->addFlash('error', 'Veuillez valider le captcha');
+            }            
+        }
+        
+        $params = [
+            'mot'=> $mot,
+            'confirmForm' => $confirmForm->createView()
+        ];
+        
+        return $this->render('default/mot/definition.html.twig', $params);
+    }
+    
+    
+    /**
+     * @Route("{id}/edit", name="editMot")
      */
     public function editAction($id, Request $request)
     {
@@ -96,6 +130,10 @@ class MotController extends Controller
                 $manager->persist($mot);
 
                 $manager->flush();
+                
+                $infoText = $mot->getTerme() . ' a bien été modifié!';
+                $this->addFlash('info', $infoText);
+                return $this->redirectToRoute('showDefinitionMot', ['id'=>$id]);
             }else{
                 $this->addFlash('error', 'Veuillez valider le captcha');
             }
@@ -108,7 +146,23 @@ class MotController extends Controller
             "mots" => $mots
         );
         
-        return $this->render('default/edit.html.twig', $params);
+        return $this->render('default/mot/edit.html.twig', $params);
+    }
+    
+    /**
+     * @Route("{id}/delete", name="deleteMot")
+     */
+    public function deleteAction($id, Request $request)
+    {
+        $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
+        $mot = $motsRepo->findOneById($id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($mot);
+        $em->flush();
+        
+        $infoText = $mot->getTerme() . ' a bien été supprimmé!';
+        $this->addFlash('info', $infoText);
+        return $this->redirectToRoute('homepage');
     }
     
     public function getCaptchaAction(){

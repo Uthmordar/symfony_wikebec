@@ -61,7 +61,7 @@ class MotType extends AbstractType
                 'type' => new DefinitionType(), 
                 'allow_add'=>true, 
                 'by_reference'=>false,
-                'cascade_validation' => true, 
+                'cascade_validation' => true,
                 'options' => array(
                     'label' => false
                 ), 
