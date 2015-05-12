@@ -79,8 +79,6 @@ class MotController extends Controller
             if(json_decode($response)->success){
                 $manager = $this->getDoctrine()->getManager();
 
-
-
                 foreach ($originalDefs as $def) {
                     $manager->persist($def);
                 }

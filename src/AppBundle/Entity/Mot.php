@@ -4,15 +4,17 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * Mot
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\MotRepository")
+ * @ORM\EntityListeners({ "AppBundle\Entity\Listener\MotListener" })
  * @ORM\HasLifecycleCallbacks()
  */
-class Mot
+class Mot extends ContainerAware 
 {
     
     /**
@@ -535,17 +537,7 @@ class Mot
     {
         return $this->trad;
     }
-    
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersistCb()
-    {
-        $date = new \DateTime;
-        $this->setCreatedDate($date);
-        $this->setLastEdit($date);
-    }
-    
+        
     /**
      * @ORM\PreUpdate
      */
@@ -553,5 +545,7 @@ class Mot
     {
         $date = new \DateTime;
         $this->setLastEdit($date);
+        $mailer=$this->container->get('mailer_services');
+        $mailer->sendUpdate()->send(['mot'=>$this]);
     }
 }   

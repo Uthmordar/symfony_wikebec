@@ -22,3 +22,14 @@ services:
     recaptcha_services:
         class: AppBundle\Services\reCaptchaServices
         arguments: ["%site_key%", "%recaptcha_site_key%"]
+    mailer_services:
+        class: AppBundle\Services\MailerServices
+        arguments: ["@mailer", "%admin_mail%", "@templating"]
+    entity_listener_resolver:
+        class: AppBundle\Doctrine\EntityListenerResolver
+        arguments: [ "@service_container" ]
+    mot_listener:
+        class: AppBundle\Entity\Listener\MotListener
+        arguments: ["@mailer_services"]
+        tags:
+            -  { name: doctrine.entity_listener }
