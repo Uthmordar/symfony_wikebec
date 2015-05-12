@@ -33,3 +33,6 @@ services:
         arguments: ["@mailer_services"]
         tags:
             -  { name: doctrine.entity_listener }
+    mot_jour_manager:
+        class: AppBundle\Services\MotJourManagerServices
+        arguments: ["@doctrine"]

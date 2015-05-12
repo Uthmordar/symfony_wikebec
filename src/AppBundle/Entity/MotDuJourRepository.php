@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class MotDuJourRepository extends EntityRepository
 {
+    public function findLast(){
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult();
+    }
 }
