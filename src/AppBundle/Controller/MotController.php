@@ -37,9 +37,9 @@ class MotController extends Controller
                 
                 $infoText = $newMot->getTerme() . ' a bien été créé!';
                 $this->addFlash('info', $infoText);
-                return $this->redirectToRoute('showDefinitionMot', ['id'=>$id]);
-
+                
                 $manager->flush();
+                return $this->redirectToRoute('showDefinitionMot', ['id'=>$newMot->getId()]);
             }else{
                 $this->addFlash('error', 'Veuillez valider le captcha');
             }            
@@ -129,6 +129,14 @@ class MotController extends Controller
 
                 $manager->persist($mot);
 
+                $backup = new \AppBundle\Entity\BackUp;
+                $backup->setData( serialize($mot) );
+                $backup->setEmail($mot->getEmail());
+                $backup->setDate( new \DateTime );
+                $backup->setModType('update');
+                $backup->setMotId( $mot->getId() );
+            
+                $manager->persist($backup);
                 $manager->flush();
                 
                 $infoText = $mot->getTerme() . ' a bien été modifié!';

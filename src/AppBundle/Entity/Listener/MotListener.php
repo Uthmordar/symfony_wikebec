@@ -19,9 +19,13 @@ class MotListener{
             $date = new \DateTime;
             $mot->setCreatedDate($date);
             $mot->setLastEdit($date);
-            $this->mailer->sendCreate()->send(['mot'=>$mot]);
-            $this->backuper->setCreate()->save($mot);
         }
+    }
+    
+    public function postPersist(Mot $mot, LifecycleEventArgs $event)
+    {
+        $this->mailer->sendCreate()->send(['mot'=>$mot]);
+        $this->backuper->setCreate()->save($mot);
     }
     
     public function preUpdate(Mot $mot, LifecycleEventArgs $event)
@@ -29,7 +33,7 @@ class MotListener{
         $date = new \DateTime;
         $mot->setLastEdit($date);
         $this->mailer->sendUpdate()->send(['mot'=>$mot]);
-        $this->backuper->setUpdate()->save($mot);
+        //$this->backuper->setUpdate()->save($mot);
     }
     
     public function preRemove(Mot $mot, LifecycleEventArgs $event)
