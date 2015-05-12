@@ -3,16 +3,18 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Tests\Constraints as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * Mot
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\MotRepository")
+ * @ORM\EntityListeners({ "AppBundle\Entity\Listener\MotListener" })
  * @ORM\HasLifecycleCallbacks()
  */
-class Mot
+class Mot extends ContainerAware 
 {
     
     /**
@@ -23,74 +25,91 @@ class Mot
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
+     * @Assert\Email(message="Votre adresse mail est mal formatée")
+     */
+    private $email;
+    
+    function getEmail() {
+        return $this->email;
+    }
+
+    function setEmail($email) {
+        $this->email = $email;
+    }
 
     /**
      * @var string
      *
      * @ORM\Column(name="terme", type="string", length=255)
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      */
     private $terme;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="variations", type="text")
+     * @ORM\Column(name="variations", type="text", nullable=true)
      */
     private $variations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prononciation", type="string", length=255)
+     * @ORM\Column(name="prononciation", type="string", length=255, nullable=true)
      */
     private $prononciation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nature", type="string", length=255)
+     * @ORM\Column(name="nature", type="string", length=255, nullable=true)
      */
     private $nature;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="genre", type="string", length=255)
+     * @ORM\Column(name="genre", type="string", length=255, nullable=true)
      */
     private $genre;
 
     /**
      * @var integer
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="nb_votes", type="integer")
      */
-    private $nb_votes;
+    private $nb_votes = 0;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255, nullable=true)
      */
     private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="origine", type="text")
+     * @ORM\Column(name="origine", type="text", nullable=true)
      */
     private $origine;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdDate", type="datetime")
+     * @ORM\Column(name="createdDate", type="datetime", nullable=true)
      */
     private $createdDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="lastEdit", type="datetime")
+     * @ORM\Column(name="lastEdit", type="datetime", nullable=true)
      */
     private $lastEdit;
     
@@ -117,9 +136,14 @@ class Mot
     /**
      * @var string
      *
-     * @ORM\Column(name="trad", type="text")
+     * @ORM\Column(name="trad", type="text", nullable=true)
      */
     private $trad;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\BackUp", mappedBy="mot", cascade={"persist"})
+     */
+    private $backup;
 
 
     /**
@@ -380,7 +404,8 @@ class Mot
     public function addDefinition(\AppBundle\Entity\Definition $definitions)
     {
         $this->definitions[] = $definitions;
-
+        $definitions->setMot($this);
+        
         return $this;
     }
 
@@ -413,7 +438,7 @@ class Mot
     public function addExemple(\AppBundle\Entity\Exemple $exemples)
     {
         $this->exemples[] = $exemples;
-
+        $exemples->setMot($this);
         return $this;
     }
 
@@ -446,6 +471,8 @@ class Mot
     public function setCategorie(\AppBundle\Entity\Categorie $categorie = null)
     {
         $this->categorie = $categorie;
+        
+        $categorie->addMot($this);
 
         return $this;
     }
@@ -492,4 +519,27 @@ class Mot
     {
         return $this->votes;
     }
-}
+
+    /**
+     * Set trad
+     *
+     * @param string $trad
+     * @return Mot
+     */
+    public function setTrad($trad)
+    {
+        $this->trad = $trad;
+
+        return $this;
+    }
+
+    /**
+     * Get trad
+     *
+     * @return string 
+     */
+    public function getTrad()
+    {
+        return $this->trad;
+    }
+}   

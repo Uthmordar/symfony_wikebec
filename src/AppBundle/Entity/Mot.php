@@ -140,7 +140,6 @@ class Mot extends ContainerAware
      */
     private $trad;
 
-
     /**
      * Get id
      *
@@ -537,4 +536,4 @@ class Mot extends ContainerAware
     {
         return $this->trad;
     }
-}   
+}

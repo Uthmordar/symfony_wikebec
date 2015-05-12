@@ -22,7 +22,12 @@ class MailerServices{
     }
     
     public function sendUpdate(){
-        $this->template="emails/create.html.twig";
+        $this->template="emails/update.html.twig";
+        return $this;
+    }
+    
+    public function sendDelete(){
+        $this->template="emails/delete.html.twig";
         return $this;
     }
     

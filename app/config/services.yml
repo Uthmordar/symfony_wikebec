@@ -30,9 +30,12 @@ services:
         arguments: [ "@service_container" ]
     mot_listener:
         class: AppBundle\Entity\Listener\MotListener
-        arguments: ["@mailer_services"]
+        arguments: ["@mailer_services", "@backup_service"]
         tags:
             -  { name: doctrine.entity_listener }
     mot_jour_manager:
         class: AppBundle\Services\MotJourManagerServices
+        arguments: ["@doctrine"]
+    backup_service:
+        class: AppBundle\Services\BackUpServices
         arguments: ["@doctrine"]
