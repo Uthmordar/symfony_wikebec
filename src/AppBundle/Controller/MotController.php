@@ -63,8 +63,8 @@ class MotController extends Controller
         $ip = $request->getClientIp();
         
         $votesRepo = $this->getDoctrine()->getRepository("AppBundle:Vote");
-        $hasVoted = ( empty( $votesRepo->hasAlreadyVoted($mot->getId(), $ip) ) ? false : true);
-        dump($hasVoted);
+        $query=$votesRepo->hasAlreadyVoted($mot->getId(), $ip);
+        $hasVoted = (empty($query))? false : true;
         
         $confirmForm = $this->createForm(new \AppBundle\Form\ConfirmType());
         $confirmForm->handleRequest($request);
@@ -80,8 +80,6 @@ class MotController extends Controller
                 $this->addFlash('error', 'Veuillez valider le captcha');
             }            
         }
-        
-        dump($hasVoted);
         
         $params = [
             'mot'=> $mot,
