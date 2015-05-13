@@ -1,1 +1,25 @@
 update <a href="{{path("showDefinitionMot", {"id":mot.getId()})}}">{{mot.getTerme()}}</a> email: {{mot.getEmail()}}
+<div>
+    <table>
+      <caption>Changements:</caption>
+      <thead>
+        <tr>
+          <th>Champ modifié</th>
+          <th>Ancien</th>
+          <th>Nouveau</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for field, update in updates %}
+            {%if field!="lastEdit"%}
+            <tr>
+                <th style="border: 1px black solid">{{field}}</th>
+                <td style="border: 1px black solid; border-left: 0px">{{update[0]}}</td>
+                <td style="border: 1px black solid; border-left: 0px">{{update[1]}}</td>
+            </tr>
+            {%endif%}
+        {% endfor %}
+        
+      </tbody>
+    </table>
+</div>
