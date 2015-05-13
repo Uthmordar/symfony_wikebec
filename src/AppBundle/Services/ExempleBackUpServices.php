@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Services\backup;
+namespace AppBundle\Services;
 
 use AppBundle\Entity\ExempleBackUp;
 use AppBundle\Entity\Exemple;

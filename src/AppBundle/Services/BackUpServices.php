@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Services\backup;
+namespace AppBundle\Services;
 
 abstract class BackUpServices{
     protected $doctrine;

@@ -1,6 +1,7 @@
 <?php
 
-namespace AppBundle\Services\backup;
+namespace AppBundle\Services;
+
 use AppBundle\Entity\Definition;
 use AppBundle\Entity\DefinitionBackUp;
 

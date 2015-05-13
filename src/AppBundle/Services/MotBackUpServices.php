@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Services\backup;
+namespace AppBundle\Services;
 
 use AppBundle\Entity\BackUp;
 use AppBundle\Entity\Mot;
