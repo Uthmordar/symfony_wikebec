@@ -35,8 +35,16 @@ class MotListener{
     }
     
     public function postUpdate(Mot $mot, LifecycleEventArgs $event){
-        $this->mailer->sendUpdate()->send(['mot'=>$mot]);
-        $this->backuper->setUpdate()->save($mot);
+    
+        $uw = $event->getEntityManager()->getUnitOfWork();
+        $uw->computeChangeSets();
+        $changes = $uw->getEntityChangeSet($mot);
+        if( !array_key_exists ( 'nb_votes' , $changes ) ){
+            $this->mailer->sendUpdate()->send(['mot'=>$mot,'updates'=>$changes]);
+            $this->backuper->setUpdate()->save($mot);    
+        }
+        
+        
     }
     
     public function preRemove(Mot $mot, LifecycleEventArgs $event)
