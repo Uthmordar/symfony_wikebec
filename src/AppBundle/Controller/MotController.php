@@ -130,15 +130,6 @@ class MotController extends Controller
                 setcookie('wikebek_user_email', $mot->getEmail(), time()+2500000);
 
                 $manager->persist($mot);
-
-                $backup = new \AppBundle\Entity\BackUp;
-                $backup->setData( serialize($mot) );
-                $backup->setEmail($mot->getEmail());
-                $backup->setDate( new \DateTime );
-                $backup->setModType('update');
-                $backup->setMotId( $mot->getId() );
-            
-                $manager->persist($backup);
                 $manager->flush();
                 
                 $infoText = $mot->getTerme() . ' a bien été modifié!';
