@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use AppBundle\Entity\Vote;
 
 /**
  * VoteRepository
@@ -12,4 +13,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class VoteRepository extends EntityRepository
 {
+    public function hasAlreadyVoted($motId, $ip)
+    {
+        $query = $this->createQueryBuilder('v')
+                        ->where('v.mot = :motId')
+                        ->setParameter('motId', $motId)
+                        ->andWhere('v.ip = :ip')
+                        ->setParameter('ip', $ip)
+                        ->getQuery();
+        
+        return $query->getResult();
+    }
 }

@@ -60,6 +60,12 @@ class MotController extends Controller
         $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
         $mot = $motsRepo->findOneById($id);
         
+        $ip = $request->getClientIp();
+        
+        $votesRepo = $this->getDoctrine()->getRepository("AppBundle:Vote");
+        $hasVoted = ( empty( $votesRepo->hasAlreadyVoted($mot->getId(), $ip) ) ? false : true);
+        dump($hasVoted);
+        
         $confirmForm = $this->createForm(new \AppBundle\Form\ConfirmType());
         $confirmForm->handleRequest($request);
         
@@ -73,9 +79,12 @@ class MotController extends Controller
             }            
         }
         
+        dump($hasVoted);
+        
         $params = [
             'mot'=> $mot,
-            'confirmForm' => $confirmForm->createView()
+            'confirmForm' => $confirmForm->createView(),
+            'hasVoted' => $hasVoted
         ];
         
         return $this->render('default/mot/definition.html.twig', $params);
