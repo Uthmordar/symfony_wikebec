@@ -17,6 +17,7 @@ class MotRepository extends EntityRepository
             ->createQuery('
                 SELECT m.id FROM AppBundle:Mot m
                 LEFT JOIN m.definitions d
+                LEFT JOIN m.exemples e
                 WHERE m.nb_votes>10'
             )
             ->getResult();
