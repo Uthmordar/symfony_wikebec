@@ -34,7 +34,7 @@ class MotController extends Controller
                 $manager->persist($newMot);
                 $newDef->setMot($newMot);
                 $newExemple->setMot($newMot);
-                
+                setcookie('wikebek_user_email', $mot->getEmail(), time()+2500000);
                 $infoText = $newMot->getTerme() . ' a bien été créé!';
                 $this->addFlash('info', $infoText);
                 
