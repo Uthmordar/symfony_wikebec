@@ -47,13 +47,40 @@
             {% endfor %}
         </div>
         <div class="col-md-3">
-            <div class="bs-example">
+            <div class="bs-example" id="actions">
                 <div class="well center-block">
-                  <button type="button" class="btn btn-success btn-lg btn-block">VOTER</button>
+                    {% if hasVoted ==true %}
+                        <button type="button" class="btn btn-disabled btn-lg btn-block" disabled>MERCI POUR VOTRE VOTE! <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>
+                    {% else %}
+                        <button type="button" class="btn btn-success btn-lg btn-block" id="btn-vote" data-mot-id="{{mot.id}}">VOTER</button>
+                    {% endif %}
                   <a type="button" class="btn btn-warning btn-lg btn-block" href="{{ path('editMot', {'id': mot.id}) }}">EDITER</a>
                   <button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target=".bs-example-modal-sm">SUPPRIMER</button>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        var button;
+        
+        $('#actions').on('click', '#btn-vote', function(){
+            var motId = $(this).data('mot-id');
+            button = $(this);
+            
+            $.ajax({
+                method: 'POST',
+                url: '/symfony-projects/symfony_wikebec/web/app_dev.php/' + motId + '/vote',
+                success: function(result) {
+                    result = JSON.parse(result);
+                    console.log(result);
+                    button.replaceWith('<button type="button" class="btn btn-disabled btn-lg btn-block" disabled>MERCI POUR VOTRE VOTE! <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>')
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
 {% endblock %}
