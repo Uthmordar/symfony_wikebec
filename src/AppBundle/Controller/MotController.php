@@ -65,7 +65,9 @@ class MotController extends Controller
         
         if($confirmForm->isValid()){
             $captcha=$this->get('recaptcha_services');
+            setcookie('wikebek_user_email', $_POST['appbundle_confirm']['email'], time()+2500000);
             $response=$captcha->setToken($request->get('g-recaptcha-response'))->checkResponse();
+            
             if(json_decode($response)->success){
                 return $this->redirectToRoute('deleteMot', ['id'=>$id]);
             }else{
@@ -162,8 +164,14 @@ class MotController extends Controller
      */
     public function deleteAction($id, Request $request)
     {
+        if( !isset($_COOKIE['wikebek_user_email']) ){
+            $this->addFlash('error', 'Mail non-renseigné.');
+            return $this->redirectToRoute('homepage');
+        }
+        
         $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
         $mot = $motsRepo->findOneById($id);
+        $mot->setEmail(filter_input( INPUT_COOKIE, 'wikebek_user_email' ));
         $em = $this->getDoctrine()->getManager();
         $em->remove($mot);
         $em->flush();
