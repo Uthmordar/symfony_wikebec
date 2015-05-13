@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\DefinitionRepository")
+ * @ORM\EntityListeners({ "AppBundle\Entity\Listener\DefinitionListener" })
+ * @ORM\HasLifecycleCallbacks()
  */
 class Definition
 {

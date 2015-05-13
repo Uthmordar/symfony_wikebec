@@ -30,12 +30,28 @@ services:
         arguments: [ "@service_container" ]
     mot_listener:
         class: AppBundle\Entity\Listener\MotListener
-        arguments: ["@mailer_services", "@backup_service"]
+        arguments: ["@mailer_services", "@mot_backup_service"]
+        tags:
+            -  { name: doctrine.entity_listener }
+    definition_listener:
+        class: AppBundle\Entity\Listener\DefinitionListener
+        arguments: ["@mailer_services", "@definition_backup_service"]
+        tags:
+            -  { name: doctrine.entity_listener }
+    exemple_listener:
+        class: AppBundle\Entity\Listener\ExempleListener
+        arguments: ["@mailer_services", "@exemple_backup_service"]
         tags:
             -  { name: doctrine.entity_listener }
     mot_jour_manager:
         class: AppBundle\Services\MotJourManagerServices
         arguments: ["@doctrine"]
-    backup_service:
-        class: AppBundle\Services\BackUpServices
+    mot_backup_service:
+        class: AppBundle\Services\backup\MotBackUpServices
+        arguments: ["@doctrine"]
+    definition_backup_service:
+        class: AppBundle\Services\backup\DefinitionBackUpServices
+        arguments: ["@doctrine"]
+    exemple_backup_service:
+        class: AppBundle\Services\backup\ExempleBackUpServices
         arguments: ["@doctrine"]
