@@ -29,6 +29,8 @@ class VoteController extends Controller
             $vote->setMot($mot);
             $vote->setIp( $request->getClientIp() );
             
+            $mot->setNbVotes( $mot->getNbVotes() + 1 );
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($vote);
             $em->flush();
