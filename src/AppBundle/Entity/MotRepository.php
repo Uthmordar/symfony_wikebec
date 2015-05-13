@@ -13,17 +13,15 @@ use Doctrine\ORM\EntityRepository;
 class MotRepository extends EntityRepository
 {
     public function findOneRandom(){
-        $count = $this->createQueryBuilder('u')
-             ->select('COUNT(u)')
-             ->where('u.nb_votes > 1')
-             ->getQuery()
-             ->getSingleScalarResult();
-        
-        return $this->createQueryBuilder('u')
-            ->setFirstResult(rand(0, $count - 1))
-            ->where('u.nb_votes > 1')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getSingleResult();
+        $count = $this->getEntityManager()
+            ->createQuery('
+                SELECT m.id FROM AppBundle:Mot m
+                LEFT JOIN m.definitions d
+                WHERE m.nb_votes>10'
+            )
+            ->getResult();
+        $key=array_rand($count);
+
+        return $this->findOneById($count[$key]['id']);
     }
 }
