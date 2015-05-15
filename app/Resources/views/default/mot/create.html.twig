@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h1>Ajout un terme:</h1>
     {{ form_start(motForm, { "attr" : { "novalidate" : "novalidate" } }) }}
     {{ form_widget(motForm) }}
     {{render(controller('AppBundle:Mot:getCaptcha'))}}

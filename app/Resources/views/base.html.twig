@@ -52,10 +52,10 @@
                     {% else %}
                         <li><a href="{{ path('homepage') }}">Dictionnaire</a></li>
                     {% endif %}
-                    {% if app.request.get('_route') == 'coupdecoeur' %}
-                        <li class="active"><a href="#" >Coups de coeur</a></li>
+                    {% if app.request.get('_route') == 'coupDeCoeur' %}
+                        <li class="active"><a href="{{ path('coupDeCoeur') }}" >Coups de coeur</a></li>
                     {% else %}
-                        <li><a href="#">Coups de coeur</a></li>
+                        <li><a href="{{ path('coupDeCoeur') }}">Coups de coeur</a></li>
                     {% endif %}
                     {% if app.request.get('_route') == 'createMot' %}
                         <li class="active"><a href="{{ path('createMot')}}">Contribuer</a></li>
