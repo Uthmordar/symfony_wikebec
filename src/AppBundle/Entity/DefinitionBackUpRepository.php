@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class DefinitionBackUpRepository extends EntityRepository
 {
+    public function findDefinitionByMotId($id){
+        $query = $this->createQueryBuilder('v')
+                        ->where('v.motId = :motId')
+                        ->setParameter('motId', $id)
+                        ->getQuery();
+        
+        return $query->getResult();
+    }
 }

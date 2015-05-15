@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Backup terme disponible :</h2>
+    <ul class="row" >
+        {% for mot in backups %}
+            <li>
+                <a href="{{ path('showBackUpMot', {'id': mot.id}) }}">{{mot.terme}}</a>
+                {% if exemples[mot.id] is defined %}
+                    <h4>Last Exemple backup</h4>
+                    <p>texte ca: {{exemples[mot.id].texteCa}}</p>
+                    <p>texte fr: {{exemples[mot.id].texteFr}}</p>
+                {% endif %}
+                {% if definitions[mot.id] is defined %}
+                    <h4>Last Definition backup</h4>
+                    <p>{{definitions[mot.id].texte}}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

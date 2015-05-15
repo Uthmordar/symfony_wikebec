@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Mot :</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <th>Version</th>
+            <th>Terme</th>
+            <th>Variations</th>
+            <th>Prononciations</th>
+            <th>Nature</th>
+            <th>Genre</th>
+            <th>Nombre</th>
+            <th>Origine</th>
+            <th>Email</th>
+            <th>Restaurer?</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Courant</td>
+                <td>{{mot.terme}}</td>
+                <td>{{mot.variations}}</td>
+                <td>{{mot.prononciation}}</td>
+                <td>{{mot.nature}}</td>
+                <td>{{mot.genre}}</td>
+                <td>{{mot.nombre}}</td>
+                <td>{{mot.origine}}</td>
+                <td>{{mot.email}}</td>
+                <th>X</th>
+            </tr>
+            {% for key, b in backups|reverse(true) %}
+                <tr>
+                    <td>{{b.lastEdit|date("m/d/Y")}}</td>
+                    <td>{{b.terme}}</td>
+                    <td>{{b.variations}}</td>
+                    <td>{{b.prononciation}}</td>
+                    <td>{{b.nature}}</td>
+                    <td>{{b.genre}}</td>
+                    <td>{{b.nombre}}</td>
+                    <td>{{b.origine}}</td>
+                    <td>{{b.email}}</td>
+                    <th><a href="{{ path('restaureBackUpMot', {'id': key}) }}">Oui</a></th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        
+    <h2>Exemples</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <th>Actif ?</th>
+            <th>Texte ca</th>
+            <th>Texte fr</th>
+            <th>Restaurer?</th>
+        </thead>
+        <tbody>
+            {% for e in mot.exemples %}
+            <tr>
+                <td>Y</td>
+                <td>{{e.texteCa}}</td>
+                <td>{{e.texteFr}}</td>
+                <th>X</th>
+            </tr>
+            {% endfor %}
+            {% for k, b in bEx|reverse(true) %}
+                <tr>
+                    <th></th>
+                    <th>{{b.texteCa}}</th>
+                    <th>{{b.texteFr}}</th>
+                    <th><a href="{{ path('restaureBackUpExemple', {'id': k}) }}">Oui</a></th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+            
+    <h2>Definitions</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <th>Actif ?</th>
+            <th>Texte</th>
+            <th>Restaurer?</th>
+        </thead>
+        <tbody>
+            {% for d in mot.definitions %}
+            <tr>
+                <td>Y</td>
+                <td>{{d.texte}}</td>
+                <th>X</th>
+            </tr>
+            {% endfor %}
+            {% for k, b in bDef|reverse(true) %}
+                <tr>
+                    <th></th>
+                    <th>{{b.texte}}</th>
+                    <th><a href="{{ path('restaureBackUpDefinition', {'id': k}) }}">Oui</a></th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
