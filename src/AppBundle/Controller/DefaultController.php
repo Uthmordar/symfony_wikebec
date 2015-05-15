@@ -13,12 +13,16 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
-        $mots = $motsRepo->findAll();
+        $motRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
+        $motDuJourRepo = $this->getDoctrine()->getRepository("AppBundle:MotDuJour");
+        $motDuJourId = $motDuJourRepo->findLast()->getMotId();
+        $motDuJour = $motRepo->findOneById($motDuJourId);
         
         $params = array(
-            "mots" => $mots
+            "mdj"  => $motDuJour
         );
+        
+        dump($motDuJour->getDefinitions());
         
         return $this->render('default/index.html.twig', $params);
     }

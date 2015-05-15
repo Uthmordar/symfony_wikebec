@@ -17,23 +17,31 @@
       </div>
     </div>
     
-    <h1>{{mot.terme}} <small>(se dit aussi {{mot.variations}})</small> </h1>
+    <h1>{{mot.terme}} {% if mot.variations %}<small>(se dit aussi {{mot.variations}})</small> {% endif %}</h1>
     <div>
-        <span class="label label-default">{{mot.nature}}</span>
-        <span class="label label-default">{{mot.genre}}</span>
-        <span class="label label-default">{{mot.nombre}}</span>
+        {% if mot.nature %}
+            <span class="label label-default">{{mot.nature}}</span>
+        {% endif %}
+        {% if mot.genre %}
+            <span class="label label-default">{{mot.genre}}</span>
+        {% endif %}
+        {% if mot.nombre %}
+            <span class="label label-default">{{mot.nombre}}</span>
+        {% endif %}
     </div>
     
     <div class="row">
         <div class="col-md-9">
-            <h2>Traduction</h2>
-            <p>{{mot.trad}}</p>
 
-            <h2>Pronontiation</h2>
-            <p>{{mot.prononciation}}</p>
-
-            <h2>Origine</h2>
-            <p>{{mot.origine}}</p>
+            {% if mot.prononciation %}
+                <h2>Prononciation</h2>
+                <p>{{mot.prononciation}}</p>
+            {% endif %}
+                
+            {% if mot.prononciation %}
+                <h2>Origine</h2>
+                <p>{{mot.origine}}</p>
+            {% endif %}
 
             {% for definition in mot.definitions %}
                 <h2>Definition</h2>

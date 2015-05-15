@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ul>
+        {% for mot in mots %}
+            <li>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <!-- <a href="{{ path('showDefinitionMot', {'id': mot.id}) }}"> -->
+                            <h3 class="panel-title" id="panel-title">
+                                {{mot.terme}} {% if mot.variations %}<small>(se dit aussi {{mot.variations}})</small> <span class="badge">{{mot.getNbvotes()}} votes!</span> {% endif %}
+                            </h3>
+                        <!-- </a> -->
+                    </div>
+                    <div class="panel-body">
+                        {% if mot.nature %}
+                            <span class="label label-default">{{mot.nature}}</span>
+                        {% endif %}
+                        {% if mot.genre %}
+                            <span class="label label-default">{{mot.genre}}</span>
+                        {% endif %}
+                        {% if mot.nombre %}
+                            <span class="label label-default">{{mot.nombre}}</span>
+                        {% endif %}
+                        {% if mot.prononciation %}
+                            <h2>Prononciation</h2>
+                            <p>{{mot.prononciation}}</p>
+                        {% endif %}
+
+                        {% if mot.prononciation %}
+                            <h2>Origine</h2>
+                            <p>{{mot.origine}}</p>
+                        {% endif %}
+
+                        {% for definition in mot.definitions %}
+                            <h2>Definition</h2>
+                            <p>{{definition.texte}}</p>
+                        {% endfor %}
+
+                        {% for exemple in mot.exemples %}
+                            <h2>Exemple</h2>
+                            <p>{{exemple.texteCa}}</p>
+                            <p><span>Traduction: </span>{{exemple.texteFr}}</p>
+                        {% endfor %}
+                        
+                        <a class="btn btn-primary btn-lg" href="{{ path('showDefinitionMot', {'id': mdj.id}) }}" role="button">Consulter mot</a>
+                        <a class="btn btn-success btn-lg" href="{{ path('showDefinitionMot', {'id': mdj.id}) }}" role="button">Votez!</a>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

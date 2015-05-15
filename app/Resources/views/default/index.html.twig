@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <ul class="row mosaique-film" id="filmsList">
-        {% for mot in mots %}
-            <li>
-                 <a href="{{ path('showDefinitionMot', {'id': mot.id}) }}">{{mot.terme}}</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <h1>Mot du jour:</h1>
+    <div class="jumbotron">
+        <h1>{{mdj.terme}}</h1>
+        
+        <p>{{mdj.definitions[0].texte}}</p>
+            
+        <p><a class="btn btn-primary btn-lg" href="{{ path('showDefinitionMot', {'id': mdj.id}) }}" role="button">Consulter mot</a></p>
+    </div>
 {% endblock %}

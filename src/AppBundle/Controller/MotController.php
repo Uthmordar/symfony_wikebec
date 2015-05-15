@@ -179,6 +179,21 @@ class MotController extends Controller
         return $this->redirectToRoute('homepage');
     }
     
+    /**
+     * @Route("coups-de-coeur", name="coupDeCoeur")
+     */
+    public function coupDeCoeurAction()
+    {
+        $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
+        $mots = $motsRepo->getCoupsDeCoeur();
+        
+        $params = array(
+            "mots" => $mots
+        );
+        
+        return $this->render('default/coupsdecoeur.html.twig', $params);
+    }
+    
     public function getCaptchaAction(){
         $captcha=$this->get('recaptcha_services');
         
@@ -187,5 +202,15 @@ class MotController extends Controller
         ];
         
         return $this->render('includes/captcha.html.twig', $params);
+    }
+    
+    /**
+     * @Route("getallmots", name="getAllMots")
+     */
+    public function getAllMotsAction()
+    {
+        $mots = $this->getDoctrine()->getRepository("AppBundle:Mot")->findAll();
+        $params = ['mots'=>$mots];
+        return $this->render('default/partials/listMot.html.twig', $params);
     }
 }
