@@ -4,7 +4,8 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Definition;
+use AppBundle\Entity\Exemple;
 
 class BackUpController extends Controller
 {
@@ -70,11 +71,11 @@ class BackUpController extends Controller
         }
         
         foreach($bEx as $m){
-            $resultEx[$m->getId()]=unserialize($m->getData());
+            $resultEx[$m->getId()]=['data'=>unserialize($m->getData()), 'status'=>$m->getModType()];
         }
         
         foreach($bDef as $m){
-            $resultDef[$m->getId()]=unserialize($m->getData());
+            $resultDef[$m->getId()]=['data'=> unserialize($m->getData()), 'status'=>$m->getModType()];
         }
          
         $params=[
@@ -132,10 +133,23 @@ class BackUpController extends Controller
         $exRepo = $this->getDoctrine()->getRepository("AppBundle:Exemple");
         $exOld = $exRepo->findOneById($exemple->getId());
         
-        $exOld->getMot()->setEmail($this->container->getParameter('admin_mail'));
-        
-        $exOld->setTexteCa($exemple->getTexteCa())
-                ->setTexteFr($exemple->getTexteFr());
+        if($exOld){
+            $exOld->getMot()->setEmail($this->container->getParameter('admin_mail'));
+
+            $exOld->setTexteCa($exemple->getTexteCa())
+                    ->setTexteFr($exemple->getTexteFr());
+        }else{
+            $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
+            $motOld = $motsRepo->findOneById($exemple->getMot()->getId());
+            $motOld->setEmail($this->container->getParameter('admin_mail'));
+            
+            $ex=new Definition();
+            $ex->setTexteCa($exemple->getTexteCa())
+                    ->setTexteFr($exemple->getTexteFr())
+                    ->setMot($motOld);
+            
+            $manager->persist($ex);
+        }
         
         $manager->remove($backup);
         $manager->flush();
@@ -159,13 +173,24 @@ class BackUpController extends Controller
         $defRepo = $this->getDoctrine()->getRepository("AppBundle:Definition");
         $defOld = $defRepo->findOneById($definition->getId());
         
-        $defOld->getMot()->setEmail($this->container->getParameter('admin_mail'));
-        
-        $defOld->setTexte($definition->getTexte());
-        
+        if($defOld){
+            $defOld->getMot()->setEmail($this->container->getParameter('admin_mail'));
+            $defOld->setTexte($definition->getTexte());
+        }else{
+            $motsRepo = $this->getDoctrine()->getRepository("AppBundle:Mot");
+            $motOld = $motsRepo->findOneById($definition->getMot()->getId());
+            
+            $motOld->setEmail($this->container->getParameter('admin_mail'));
+            
+            $def=new Definition();
+            $def->setTexte($definition->getTexte())
+                    ->setMot($motOld);
+            
+            $manager->persist($def);
+        }
         $manager->remove($backup);
         $manager->flush();
-        
+
         $referer = $this->getRequest()->headers->get('referer');
 
         return $this->redirect($referer);

@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <style>
+        .row-suppression{
+            background-color: rgba(255,0,0, 0.3);
+        }
+        .row-creation{
+            background-color: rgba(0,255,0, 0.3);
+        }
+        .row-update{
+            background-color: rgba(0,0,255, 0.3);
+        }
+    </style>
     <h2>Mot :</h2>
     <table class="table table-bordered table-hover">
         <thead>
@@ -63,10 +74,10 @@
             </tr>
             {% endfor %}
             {% for k, b in bEx|reverse(true) %}
-                <tr>
+                <tr class="row-{{b.status}}">
                     <th></th>
-                    <th>{{b.texteCa}}</th>
-                    <th>{{b.texteFr}}</th>
+                    <th>{{b.data.texteCa}}</th>
+                    <th>{{b.data.texteFr}}</th>
                     <th><a href="{{ path('restaureBackUpExemple', {'id': k}) }}">Oui</a></th>
                 </tr>
             {% endfor %}
@@ -89,9 +100,9 @@
             </tr>
             {% endfor %}
             {% for k, b in bDef|reverse(true) %}
-                <tr>
+                <tr class="row-{{b.status}}">
                     <th></th>
-                    <th>{{b.texte}}</th>
+                    <th>{{b.data.texte}}</th>
                     <th><a href="{{ path('restaureBackUpDefinition', {'id': k}) }}">Oui</a></th>
                 </tr>
             {% endfor %}

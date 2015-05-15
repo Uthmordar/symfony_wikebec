@@ -123,7 +123,11 @@ class MotController extends Controller
                 $manager = $this->getDoctrine()->getManager();
 
                 foreach ($originalDefs as $def) {
-                    $manager->persist($def);
+                    if ($mot->getDefinitions()->contains($def) == false) {
+                        $manager->remove($def);
+                    } else {
+                        $manager->persist($def);    
+                    }
                 }
 
                 foreach ($originalExemples as $exemple) {
