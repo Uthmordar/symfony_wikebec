@@ -13,6 +13,11 @@ class DefinitionBuilderService{
         $this->motRepo = $doctrine->getRepository("AppBundle:Definition");
     }
     
+    /**
+     * 
+     * @param type $mot
+     * @param type $dataEntry
+     */
     public function checkMultipleDefinitions($mot, $dataEntry)
     {
         $this->create($mot, $dataEntry['def_1']);
@@ -22,6 +27,11 @@ class DefinitionBuilderService{
         }
     }
     
+    /**
+     * 
+     * @param type $mot
+     * @param type $def
+     */
     public function create($mot, $def)
     {
         $definition = new \AppBundle\Entity\Definition();

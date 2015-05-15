@@ -2,6 +2,12 @@
 namespace AppBundle\Services;
 
 class CSVParserServices{
+    
+    /**
+     * get csv & return it with first row as array key
+     * @param type $csv
+     * @return type
+     */
     public function parse($csv){
         $data=[];
         $header=null;

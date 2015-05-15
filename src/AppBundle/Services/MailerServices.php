@@ -16,21 +16,38 @@ class MailerServices{
         $this->templating=$templating;
     }
     
+    /**
+     * 
+     * @return \AppBundle\Services\MailerServices
+     */
     public function sendCreate(){
         $this->template="emails/create.html.twig";
         return $this;
     }
     
+    /**
+     * 
+     * @return \AppBundle\Services\MailerServices
+     */
     public function sendUpdate(){
         $this->template="emails/update.html.twig";
         return $this;
     }
     
+    /**
+     * 
+     * @return \AppBundle\Services\MailerServices
+     */
     public function sendDelete(){
         $this->template="emails/delete.html.twig";
         return $this;
     }
     
+    /**
+     * 
+     * @param type $params
+     * @return type
+     */
     public function send($params){
         $message=\Swift_Message::newInstance()
             ->setSubject('Changement sur Wikebec')

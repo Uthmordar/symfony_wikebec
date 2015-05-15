@@ -6,6 +6,10 @@ use AppBundle\Entity\ExempleBackUp;
 use AppBundle\Entity\Exemple;
 
 class ExempleBackUpServices extends BackUpServices{
+    /**
+     * 
+     * @param Exemple $exemple
+     */
     public function save(Exemple $exemple)
     {
         if($this->status){

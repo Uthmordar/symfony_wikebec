@@ -6,6 +6,10 @@ use AppBundle\Entity\BackUp;
 use AppBundle\Entity\Mot;
 
 class MotBackUpServices extends BackUpServices{
+    /**
+     * 
+     * @param Mot $mot
+     */
     public function save(Mot $mot)
     {
         if($this->status){

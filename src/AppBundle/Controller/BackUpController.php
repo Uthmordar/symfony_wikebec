@@ -67,15 +67,15 @@ class BackUpController extends Controller
         $resultDef=[];
         
         foreach($mots as $m){
-            $result[$m->getId()]=unserialize($m->getData());
+            $result[$m->getId()]=['data'=>unserialize($m->getData()), 'status'=>$m->getModType()];
         }
         
         foreach($bEx as $m){
-            $resultEx[$m->getId()]=['data'=>unserialize($m->getData()), 'status'=>$m->getModType()];
+            $resultEx[$m->getId()]=['data'=>unserialize($m->getData()), 'status'=>$m->getModType(), 'email'=>$m->getEmail()];
         }
         
         foreach($bDef as $m){
-            $resultDef[$m->getId()]=['data'=> unserialize($m->getData()), 'status'=>$m->getModType()];
+            $resultDef[$m->getId()]=['data'=> unserialize($m->getData()), 'status'=>$m->getModType(), 'email'=>$m->getEmail()];
         }
          
         $params=[

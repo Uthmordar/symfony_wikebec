@@ -13,10 +13,20 @@ class ExempleBuilderService{
         $this->motRepo = $doctrine->getRepository("AppBundle:Exemple");
     }
     
+    /**
+     * 
+     * @param type $input
+     * @return type
+     */
     public function checkNull($input){
         return ($input!="NULL" && $input!="")? $input : null; 
     }
     
+    /**
+     * 
+     * @param type $mot
+     * @param type $data
+     */
     public function create($mot, $data)
     {
         $exemple = new \AppBundle\Entity\Exemple();

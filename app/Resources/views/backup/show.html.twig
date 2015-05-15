@@ -1,5 +1,21 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .row-suppression{
+            background-color: rgba(255,0,0, 0.3);
+        }
+        .row-creation{
+            background-color: rgba(0,255,0, 0.3);
+        }
+        .row-update{
+            background-color: rgba(0,0,255, 0.3);
+        }
+    </style>
+    
+{% endblock %}
+
 {% block body %}
     <style>
         .row-suppression{
@@ -40,16 +56,16 @@
                 <th>X</th>
             </tr>
             {% for key, b in backups|reverse(true) %}
-                <tr>
-                    <td>{{b.lastEdit|date("m/d/Y")}}</td>
-                    <td>{{b.terme}}</td>
-                    <td>{{b.variations}}</td>
-                    <td>{{b.prononciation}}</td>
-                    <td>{{b.nature}}</td>
-                    <td>{{b.genre}}</td>
-                    <td>{{b.nombre}}</td>
-                    <td>{{b.origine}}</td>
-                    <td>{{b.email}}</td>
+                <tr class="row-{{b.status}}">
+                    <td>{{b.data.lastEdit|date("m/d/Y")}}</td>
+                    <td>{{b.data.terme}}</td>
+                    <td>{{b.data.variations}}</td>
+                    <td>{{b.data.prononciation}}</td>
+                    <td>{{b.data.nature}}</td>
+                    <td>{{b.data.genre}}</td>
+                    <td>{{b.data.nombre}}</td>
+                    <td>{{b.data.origine}}</td>
+                    <td>{{b.data.email}}</td>
                     <th><a href="{{ path('restaureBackUpMot', {'id': key}) }}">Oui</a></th>
                 </tr>
             {% endfor %}
@@ -62,6 +78,7 @@
             <th>Actif ?</th>
             <th>Texte ca</th>
             <th>Texte fr</th>
+            <th>Email</th>
             <th>Restaurer?</th>
         </thead>
         <tbody>
@@ -70,6 +87,7 @@
                 <td>Y</td>
                 <td>{{e.texteCa}}</td>
                 <td>{{e.texteFr}}</td>
+                <td></td>
                 <th>X</th>
             </tr>
             {% endfor %}
@@ -78,6 +96,7 @@
                     <th></th>
                     <th>{{b.data.texteCa}}</th>
                     <th>{{b.data.texteFr}}</th>
+                    <th>{{b.email}}</th>
                     <th><a href="{{ path('restaureBackUpExemple', {'id': k}) }}">Oui</a></th>
                 </tr>
             {% endfor %}
@@ -89,6 +108,7 @@
         <thead>
             <th>Actif ?</th>
             <th>Texte</th>
+            <th>Email</th>
             <th>Restaurer?</th>
         </thead>
         <tbody>
@@ -96,6 +116,7 @@
             <tr>
                 <td>Y</td>
                 <td>{{d.texte}}</td>
+                <td></td>
                 <th>X</th>
             </tr>
             {% endfor %}
@@ -103,6 +124,7 @@
                 <tr class="row-{{b.status}}">
                     <th></th>
                     <th>{{b.data.texte}}</th>
+                    <th>{{b.email}}</th>
                     <th><a href="{{ path('restaureBackUpDefinition', {'id': k}) }}">Oui</a></th>
                 </tr>
             {% endfor %}

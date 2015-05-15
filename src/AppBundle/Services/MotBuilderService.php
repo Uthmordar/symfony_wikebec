@@ -22,6 +22,11 @@ class MotBuilderService{
         $this->catRepo = $doctrine->getRepository("AppBundle:Categorie");
     }
     
+    /**
+     * 
+     * @param type $data
+     * @return \AppBundle\Entity\Mot
+     */
     public function create($data)
     {
         if($this->motRepo->findOneByTerme($data["terme"])){
@@ -55,10 +60,21 @@ class MotBuilderService{
         return $mot;
     }
     
+    /**
+     * 
+     * @param type $input
+     * @return type
+     */
     public function checkNull($input){
         return ($input!="NULL" && $input!="")? $input : null; 
     }
     
+    /**
+     * 
+     * @param \AppBundle\Entity\Mot $mot
+     * @param type $catName
+     * @throws \RuntimeException
+     */
     public function attachCategorie(\AppBundle\Entity\Mot $mot, $catName){
         $cat = $this->catRepo->findOneByNom( $this->catRef[ $catName ] );
         

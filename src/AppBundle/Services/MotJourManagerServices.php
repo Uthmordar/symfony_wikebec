@@ -12,11 +12,19 @@ class MotJourManagerServices{
         $this->repo=$this->doctrine->getRepository("AppBundle:Mot");
     }
     
+    /**
+     * select one quality Mot randomly
+     * @return \AppBundle\Services\MotJourManagerServices
+     */
     public function getNew(){
         $this->mot=$this->repo->findOneRandom();
         return $this;
     }
     
+    /**
+     * insert Mot du jour 
+     * @throws \RuntimeException
+     */
     public function pushWord(){
         if($this->mot==null){
             throw new \RuntimeException('You should get a new word with getNew before');
