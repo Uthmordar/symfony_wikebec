@@ -143,7 +143,7 @@ class BackUpController extends Controller
             $motOld = $motsRepo->findOneById($exemple->getMot()->getId());
             $motOld->setEmail($this->container->getParameter('admin_mail'));
             
-            $ex=new Definition();
+            $ex=new Exemple();
             $ex->setTexteCa($exemple->getTexteCa())
                     ->setTexteFr($exemple->getTexteFr())
                     ->setMot($motOld);
