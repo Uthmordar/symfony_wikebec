@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h1>Coups de coeur:</h1>
     <ul>
         {% for mot in mots %}
             <li>
@@ -43,11 +44,40 @@
                             <p><span>Traduction: </span>{{exemple.texteFr}}</p>
                         {% endfor %}
                         
-                        <a class="btn btn-primary btn-lg" href="{{ path('showDefinitionMot', {'id': mdj.id}) }}" role="button">Consulter mot</a>
-                        <a class="btn btn-success btn-lg" href="{{ path('showDefinitionMot', {'id': mdj.id}) }}" role="button">Votez!</a>
+                        <a class="btn btn-primary btn-lg" href="{{ path('showDefinitionMot', {'id': mot.id}) }}" role="button">Consulter mot</a>
+                        <a class="btn btn-success btn-lg vote-btn"  role="button" data-mot-id="{{mot.id}}">Votez!</a>
                     </div>
                 </div>
             </li>
         {% endfor %}
     </ul>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var button;
+        
+        $('.vote-btn').click(function(){
+            var motId = $(this).data('mot-id');
+            button = $(this);
+            
+            $.ajax({
+                method: 'POST',
+                url: '/symfony-projects/symfony_wikebec/web/app_dev.php/' + motId + '/vote',
+                success: function(result) {
+                    result = JSON.parse(result);
+                    console.log(result);
+                    if(result.success){
+                        button.replaceWith('<button type="button" class="btn btn-disabled btn-lg " disabled>MERCI POUR VOTRE VOTE! <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>')
+                    } else{
+                        button.replaceWith('<button type="button" class="btn btn-disabled btn-lg " disabled>VOUS AVEZ DÉJA VOTÉ!<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>')
+                    }
+                    
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
 {% endblock %}

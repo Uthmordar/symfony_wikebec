@@ -83,7 +83,11 @@
                 success: function(result) {
                     result = JSON.parse(result);
                     console.log(result);
-                    button.replaceWith('<button type="button" class="btn btn-disabled btn-lg btn-block" disabled>MERCI POUR VOTRE VOTE! <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>')
+                    if(result.success){
+                        button.replaceWith('<button type="button" class="btn btn-disabled btn-lg btn-block" disabled>MERCI POUR VOTRE VOTE! <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></button>')
+                    } else{
+                        button.replaceWith('<button type="button" class="btn btn-disabled btn-lg btn-block" disabled>VOUS AVEZ DÉJA VOTÉ!</button>')
+                    }
                 },
                 error: function(error) {
                     console.log(error);
