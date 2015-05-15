@@ -25,4 +25,17 @@ class MotRepository extends EntityRepository
 
         return $this->findOneById($count[$key]['id']);
     }
+    
+    public function getCoupsDeCoeur()
+    {
+        $query = $this->createQueryBuilder('m')
+                        ->where('m.nb_votes > 20')
+                        ->setMaxResults( 20 )
+                        ->orderBy('m.nb_votes', 'DESC')
+                        ->getQuery();
+        
+        dump($query->getResult());
+        
+        return $query->getResult();
+    }
 }
